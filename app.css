@@ -31,13 +31,13 @@ button{
 form#frm_user{
     display: grid;
     grid-template-columns: 90fr 10fr;
-    gap: 0.5rem;
+    gap: 1rem;
 }
 
 div#users{
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1rem;
     padding: 1rem 0;
 }
 

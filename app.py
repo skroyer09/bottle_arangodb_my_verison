@@ -1,4 +1,4 @@
-from bottle import delete, get, post, request, static_file, template
+from bottle import delete, get, post, put, request, redirect, static_file, template
 import x
 from icecream import ic
 import time
@@ -14,7 +14,8 @@ def _():
     try:
         x.disable_cache()
         users = x.db({"query":"FOR user IN users RETURN user"})
-        return template("index", users=users["result"])
+        ic(users)
+        return template("index.html", users=users["result"])
     except Exception as ex:
         ic(ex)
         return "system under maintainance"
@@ -39,11 +40,11 @@ def _():
         last_name = request.forms.get("user_last_name")
         current_time_epoch = int(time.time())
         user = {
-            "name":user_name,
+            "name": user_name,
             "last_name": last_name,
-            "updated_at": current_time_epoch
+            "updated_at": current_time_epoch 
         }
-        res = x.db({"query":"INSERT @doc IN users RETURN NEW", "bindVars":{"doc":user}})
+        res = x.db({"query": "INSERT @doc IN users RETURN NEW", "bindVars": {"doc": user}})
         print(res)
         html = template("_user.html", user=res["result"][0])
         return f"""
@@ -61,7 +62,6 @@ def _():
             """            
     finally:
         pass
-
 
 ##############################
 @delete("/users/<key>")
@@ -88,11 +88,12 @@ def update_user(key):
     try:
         user_name = x.validate_user_name()
         last_name = request.forms.get("user_last_name")
+        # Get the current time in epoch format
         current_time_epoch = int(time.time())
         user = {
             "name": user_name,
             "last_name": last_name,
-            "updated_at": current_time_epoch 
+            "updated_at": current_time_epoch  # Set updated_at to current time in epoch format
         }
         res = x.db({"query": "UPDATE @key WITH @doc IN users RETURN NEW", "bindVars": {"key": key, "doc": user}})
         print(res)
