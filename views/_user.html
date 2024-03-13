@@ -2,7 +2,12 @@
     <div>
         {{user["_key"]}}
     </div>
-    <input value="{{user['name']}}">        
+    <form class="update-form" action="/users/{{user['_key']}}/update" method="POST">
+        <input name="user_name" value="{{user['name']}}" type="text">
+        <input name="user_last_name" value="{{user['last_name']}}" type="text">
+        <input name="user_updated_at" value="{{user['updated_at']}}" type="text" disabled></input>
+        <button type="submit">Update</button>
+    </form>
     <button
         mix-delete="/users/{{user['_key']}}"
         mix-default="Delete"
